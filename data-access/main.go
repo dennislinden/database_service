@@ -6,6 +6,7 @@ import (
 	"html/template"
 	"log"
 	"net/http"
+	"strconv"
 
 	_ "github.com/go-sql-driver/mysql"
 )
@@ -39,7 +40,7 @@ func connectToDatabase() {
 	fmt.Println("Database Connected!")
 }
 
-func insertToDatabase(name string, age int64, number int64, address string) {
+func insertToDatabase(name string, age int, number int, address string) {
 	// perform a db.Query insert
 	insert, err := db.Query("INSERT INTO test VALUES(?, ?, ?, ?)", name, age, number, address)
 
@@ -80,7 +81,20 @@ func processGetHandler(w http.ResponseWriter, r *http.Request) {
 	s.Address = r.FormValue("addressValue")
 	fmt.Println("Username:", s.Name, "Age:", s.Age, "Number:", s.Number, "Address:", s.Address)
 	tpl.ExecuteTemplate(w, "getform.html", s)
-	insertToDatabase(string(s.Name), 12, 42334, s.Address)
+
+	//convert string to int
+	ageConvert, err := strconv.Atoi(s.Age)
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	//convert string to int
+	numberConvert, err := strconv.Atoi(s.Number)
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	insertToDatabase(string(s.Name), ageConvert, numberConvert, s.Address)
 }
 
 func main() {
