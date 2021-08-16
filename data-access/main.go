@@ -80,6 +80,7 @@ func processGetHandler(w http.ResponseWriter, r *http.Request) {
 	s.Address = r.FormValue("addressValue")
 	fmt.Println("Username:", s.Name, "Age:", s.Age, "Number:", s.Number, "Address:", s.Address)
 	tpl.ExecuteTemplate(w, "getform.html", s)
+	insertToDatabase(string(s.Name), 12, 42334, s.Address)
 }
 
 func main() {
